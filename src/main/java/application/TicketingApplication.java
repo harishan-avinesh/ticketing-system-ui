@@ -22,7 +22,7 @@ public class TicketingApplication extends Application {
     private List<Thread> vendorThreads = new ArrayList<>();
     private List<Thread> customerThreads = new ArrayList<>();
     private TextArea logArea;
-    private Label ticketCountLabel;
+    //private Label ticketCountLabel;
     private Label vendorsRunningLabel;
     private Label customersRunningLabel;
     private Label totalTicketsIssuedLabel;
@@ -46,10 +46,10 @@ public class TicketingApplication extends Application {
         Button stopButton = new Button("Stop Simulation");
 
         // Labels for real-time metrics
-        ticketCountLabel = new Label("Tickets Available: 0");
+        //ticketCountLabel = new Label("Tickets Available: 0");
         vendorsRunningLabel = new Label("Vendors Running: 0");
         customersRunningLabel = new Label("Customers Running: 0");
-        totalTicketsIssuedLabel = new Label("Total Tickets Issued: 0");
+        totalTicketsIssuedLabel = new Label("Total Tickets Sold: 0");
 
         logArea = new TextArea();
         logArea.setEditable(false);
@@ -73,7 +73,7 @@ public class TicketingApplication extends Application {
 
         // Metrics layout
         VBox metricsBox = new VBox(10,
-                ticketCountLabel,
+                //ticketCountLabel,
                 vendorsRunningLabel,
                 customersRunningLabel,
                 totalTicketsIssuedLabel
@@ -99,6 +99,24 @@ public class TicketingApplication extends Application {
                 int maxTicketCapacity = Integer.parseInt(maxTicketCapacityField.getText());
                 int numberOfVendors = Integer.parseInt(numberOfVendorsField.getText());
                 int numberOfCustomers = Integer.parseInt(numberOfCustomersField.getText());
+
+                if (numberOfVendors > totalTickets) {
+                    showAlert("Input Error", "Number of vendors cannot exceed total tickets.");
+                    return;
+                }
+                if (numberOfCustomers > totalTickets) {
+                    showAlert("Input Error", "Number of customers cannot exceed total tickets.");
+                    return;
+                }
+                if (maxTicketCapacity > totalTickets) {
+                    showAlert("Input Error", "Max ticket capacity cannot exceed total tickets.");
+                    return;
+                }
+
+                if(customerRetrievalRate>5000 || ticketReleaseRate>5000){
+                    showAlert("Too slow","Release and Retrieval rates must be less than 5 seconds to limit delay during demonstration.");
+                    return;
+                }
 
                 config = new SystemConfig(
                         totalTickets,
@@ -130,7 +148,7 @@ public class TicketingApplication extends Application {
         primaryStage.show();
 
         // Update Ticket Count and Metrics Periodically
-        startMetricsUpdater();
+        //startMetricsUpdater();
     }
 
     private void startSimulation() {
@@ -206,7 +224,7 @@ public class TicketingApplication extends Application {
             updateTicketIssuedLabel(totalTicketsIssued);
         });
     }
-
+/*
     private void startMetricsUpdater() {
         Task<Void> task = new Task<Void>() {
             @Override
@@ -232,7 +250,7 @@ public class TicketingApplication extends Application {
         thread.setDaemon(true);
         thread.start();
     }
-
+*/
     private void updateThreadCountLabels() {
         Platform.runLater(() -> {
             vendorsRunningLabel.setText("Vendors Running: " + vendorThreads.size());
@@ -242,7 +260,7 @@ public class TicketingApplication extends Application {
 
     private void updateTicketIssuedLabel(int issued) {
         Platform.runLater(() -> {
-            totalTicketsIssuedLabel.setText("Total Tickets Issued: " + issued);
+            totalTicketsIssuedLabel.setText("Total Tickets Sold: " + issued);
         });
     }
 

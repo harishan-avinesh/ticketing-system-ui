@@ -74,4 +74,4 @@ To configure and start the Ticketing System:
 - Labels: Display real-time statistics about ticket availability and transaction
 =======
 1
->>>>>>> 6eee8b6caac1ad47c8f7da37f928849c83185aaa
+>>>>>>> 
